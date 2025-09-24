@@ -4,7 +4,7 @@ import { Category } from '@prisma/client'
 
 const getProducts = async (req: Request, res: Response) => {
   try {
-    const { search, category, minPrice, maxPrice } = req.query
+    const { search, category, minPrice, maxPrice, page, limit } = req.query
 
     const where: any = {}
 
@@ -31,14 +31,34 @@ const getProducts = async (req: Request, res: Response) => {
       if (maxPrice) where.price.lte = Number(maxPrice)
     }
 
-    const products = await prisma.products.findMany({ where })
+    const pageNum = Math.max(1, parseInt(page as string, 10))
+    const pageSize = Math.max(1, parseInt(limit as string, 10))
+    const skip = (pageNum - 1) * pageSize
+    const take = pageSize
+
+    const [products, total] = await Promise.all([
+      prisma.products.findMany({
+        where,
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' }, // optional, for consistent ordering
+      }),
+      prisma.products.count({ where }),
+    ])
 
     if (!products || products.length === 0)
       return res
         .status(404)
         .json({ status: 'Failure', message: 'No products were found with these filters' })
 
-    return res.json({ status: 'success', length: products.length, data: products })
+    return res.json({
+      status: 'success',
+      page: pageNum,
+      limit: pageSize,
+      total,
+      totalPages: Math.ceil(total / pageSize),
+      data: products,
+    })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ status: 'failure', message: 'Internal server error' })

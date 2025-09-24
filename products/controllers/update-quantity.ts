@@ -25,11 +25,12 @@ const updateQuantity = async (req: Request, res: Response) => {
 
       if (searchedProduct?.quantity - product.quantity <= 0)
         await prisma.products.update({ where: { id: product.id }, data: { quantity: 0 } })
-      else
+      else {
         await prisma.products.update({
           where: { id: product.id },
           data: { quantity: searchedProduct.quantity - product.quantity },
         })
+      }
     }
 
     return res.status(200).json({ status: 'Success', message: 'Products updated' })

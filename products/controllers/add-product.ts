@@ -1,7 +1,5 @@
 import { Request, Response } from 'express'
-
 import { productSchema } from '../schemas/productSchema'
-
 import prisma from '../prismaClient'
 
 const addProduct = async (req: Request, res: Response) => {

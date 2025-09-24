@@ -9,7 +9,7 @@ const getProductById = async (req: Request, res: Response) => {
     if (!id) {
       return res.status(400).json({
         status: 'Failure',
-        message: 'Product ID is required',
+        message: 'Invalid or missing id',
       })
     }
 
