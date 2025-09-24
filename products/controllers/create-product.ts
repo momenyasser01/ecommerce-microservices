@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { productSchema } from '../schemas/productSchema'
 import prisma from '../prismaClient'
 
-const addProduct = async (req: Request, res: Response) => {
+const createProduct = async (req: Request, res: Response) => {
   try {
     const parsed = productSchema.safeParse(req.body)
 
@@ -30,4 +30,4 @@ const addProduct = async (req: Request, res: Response) => {
   }
 }
 
-export default addProduct
+export default createProduct
