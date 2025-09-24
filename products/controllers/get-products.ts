@@ -6,6 +6,19 @@ const getProducts = async (req: Request, res: Response) => {
   try {
     const { search, category, minPrice, maxPrice, page, limit } = req.query
 
+    if (!page || !limit)
+      return res.status(400).json({ status: 'Failure', message: 'Missing required fields' })
+
+    if (
+      !Number.isInteger(page) ||
+      Number(page) >= 0 ||
+      !Number.isInteger(limit) ||
+      Number(limit) >= 0
+    )
+      return res
+        .status(400)
+        .json({ status: 'Failure', message: 'Page and limit must be positive integers' })
+
     const where: any = {}
 
     if (search) {
