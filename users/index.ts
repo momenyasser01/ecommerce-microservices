@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 
-import products from './routes/products'
+import users from './routes/users'
 
 dotenv.config()
 
@@ -12,10 +12,10 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5001
 
-app.use('/products', products)
+app.use('/users', users)
 
 app.listen(port, () => {
-  console.log(`Products service running on port ${port}`)
+  console.log(`Users service running on port ${port}`)
 })
