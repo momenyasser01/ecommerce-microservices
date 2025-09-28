@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-
 import prisma from '../prismaClient'
+import { isValidObjectId } from 'mongoose'
 
 const getProductById = async (req: Request, res: Response) => {
   try {
@@ -9,9 +9,12 @@ const getProductById = async (req: Request, res: Response) => {
     if (!id) {
       return res.status(400).json({
         status: 'Failure',
-        message: 'Invalid or missing id',
+        message: 'Missing id parameter',
       })
     }
+
+    if (!isValidObjectId(id))
+      return res.status(400).json({ status: 'Failure', message: 'Invalid product id' })
 
     const product = await prisma.products.findUnique({ where: { id } })
 

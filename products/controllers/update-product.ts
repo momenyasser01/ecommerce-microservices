@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import prisma from '../prismaClient'
 
-const updateQuantity = async (req: Request, res: Response) => {
+const updateProduct = async (req: Request, res: Response) => {
   try {
     const { products } = req.body
 
@@ -40,4 +40,4 @@ const updateQuantity = async (req: Request, res: Response) => {
   }
 }
 
-export default updateQuantity
+export default updateProduct

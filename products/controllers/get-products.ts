@@ -10,10 +10,10 @@ const getProducts = async (req: Request, res: Response) => {
       return res.status(400).json({ status: 'Failure', message: 'Missing required fields' })
 
     if (
-      !Number.isInteger(page) ||
-      Number(page) >= 0 ||
-      !Number.isInteger(limit) ||
-      Number(limit) >= 0
+      !Number.isInteger(Number(page)) ||
+      Number(page) <= 0 ||
+      !Number.isInteger(Number(limit)) ||
+      Number(limit) <= 0
     )
       return res
         .status(400)
@@ -35,6 +35,11 @@ const getProducts = async (req: Request, res: Response) => {
 
     if (category) {
       const normalized = category.toString().trim().toUpperCase().replace(/ /g, '_')
+
+      if (!Object.values(Category).includes(normalized as Category)) {
+        return res.status(400).json({ status: 'Failure', message: 'Invalid category value' })
+      }
+
       where.category = normalized as Category
     }
 
