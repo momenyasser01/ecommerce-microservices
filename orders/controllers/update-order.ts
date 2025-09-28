@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import prisma from '../prismaClient'
-import { isValidObjectId } from 'mongoose'
 import { OrderStatus } from '@prisma/client'
 
 const updateOrder = async (req: Request, res: Response) => {
@@ -8,17 +7,6 @@ const updateOrder = async (req: Request, res: Response) => {
     const { id, products, total, status } = req.body
 
     if (products && !status) {
-      if (!id || !total)
-        return res.status(400).json({ status: 'Failure', message: 'Missing required fields' })
-
-      if (!isValidObjectId(id))
-        return res.status(400).json({ status: 'Failure', message: 'Invalid order id' })
-
-      if (Number(total) <= 0)
-        return res
-          .status(400)
-          .json({ status: 'Failure', message: "Total can't be a negative number" })
-
       const order = await prisma.orders.findUnique({ where: { id } })
 
       if (!order)
@@ -34,7 +22,9 @@ const updateOrder = async (req: Request, res: Response) => {
 
       const updatedOrder = await prisma.orders.update({ where: { id }, data: { products, total } })
 
-      return res.status(200).json({ status: 'Success', data: updatedOrder })
+      return res
+        .status(200)
+        .json({ status: 'Success', message: 'Order was updated successfully', data: updatedOrder })
     }
 
     if (!products && status) {
@@ -53,16 +43,19 @@ const updateOrder = async (req: Request, res: Response) => {
           message: "Order status can't be changed if it has been delivered or canceled already",
         })
 
-      if (!Object.values(OrderStatus).includes(normalized as OrderStatus)) {
-        return res.status(400).json({ status: 'Failure', message: 'Invalid status value' })
-      }
+      if (order.status === normalized)
+        return res
+          .status(400)
+          .json({ status: 'Failure', message: 'No need to change CREATED status to CREATED' })
 
       const updatedOrder = await prisma.orders.update({
         where: { id },
         data: { status: normalized as OrderStatus },
       })
 
-      return res.status(200).json({ status: 'Success', data: updatedOrder })
+      return res
+        .status(200)
+        .json({ status: 'Success', message: 'Order was updated successfully', data: updatedOrder })
     }
 
     return res

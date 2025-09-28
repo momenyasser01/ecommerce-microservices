@@ -5,13 +5,14 @@ import getOrders from '../controllers/get-orders'
 import getOrderById from '../controllers/get-order'
 import updateOrder from '../controllers/update-order'
 import deleteOrder from '../controllers/delete-order'
+import validateOrderInput from '../middleware/validateOrderInput'
 
 const router = express.Router()
 
 router.get('/', getOrders)
 router.get('/:id', getOrderById)
 router.post('/', createOrder)
-router.patch('/', updateOrder)
+router.patch('/', validateOrderInput, updateOrder)
 router.delete('/:id', deleteOrder)
 
 export default router

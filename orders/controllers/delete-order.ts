@@ -13,7 +13,7 @@ const deleteOrder = async (req: Request, res: Response) => {
 
     await prisma.orders.delete({ where: { id } })
 
-    return res.status(204)
+    return res.status(204).json({})
   } catch (error) {
     console.error(error)
     return res.status(500).json({ status: 'Failure', message: 'Internal server error' })

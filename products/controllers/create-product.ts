@@ -15,7 +15,11 @@ const createProduct = async (req: Request, res: Response) => {
     }
 
     const product = await prisma.products.create({
-      data: { ...parsed.data, description: parsed.data.description ?? null },
+      data: {
+        ...parsed.data,
+        description: parsed.data.description ?? null,
+        price: Number(parsed.data.price.toFixed(2)),
+      },
     })
 
     return res
