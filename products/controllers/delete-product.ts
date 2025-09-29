@@ -10,10 +10,9 @@ const deleteProduct = async (req: Request, res: Response) => {
 
     await prisma.products.delete({ where: { id } })
 
-    return res.status(204)
+    return res.status(204).json({})
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-      // Record not found
       return res.status(404).json({
         status: 'Failure',
         message: 'No product was found with this id',

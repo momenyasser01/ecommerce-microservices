@@ -14,7 +14,7 @@ model products {
   price         Float
   quantity      Int
   weight        Int
-  measurement   String
+  measurement   Measurement
   category      Category
   image         String
   createdAt     DateTime @default(now())
@@ -27,4 +27,10 @@ enum Category {
   DAIRY_AND_EGGS
   MEAT_POULTRY_AND_SEAFOOD
   FRUITS_AND_VEGETABLES
+}
+
+enum Measurement {
+  G
+  ML
+  PCS
 }

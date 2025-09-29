@@ -3,9 +3,9 @@ import { z } from 'zod'
 export const orderProductSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
   description: z.string().optional().nullable(),
-  price: z.number().nonnegative('Price must be >= 0'),
+  price: z.number().positive('Price must be > 0'),
   quantity: z.number().int().positive('Quantity must be > 0'),
-  weight: z.number().int().nonnegative('Weight must be >= 0'),
+  weight: z.number().int().positive('Weight must be > 0'),
   measurement: z.string().min(1, 'Measurement unit is required'),
   image: z.url('Image must be a valid URL'),
 })
@@ -24,7 +24,7 @@ export const orderSchema = z.object({
   floor: z.string().min(1, 'Floor is required'),
   apartmentNumber: z.string().optional().nullable(),
   status: z.enum(['CREATED', 'DELIVERED', 'CANCELLED']).default('CREATED'),
-  total: z.number().nonnegative('Total must be >= 0'),
+  total: z.number().positive('Total must be > 0'),
 })
 
 export type OrderInput = z.infer<typeof orderSchema>

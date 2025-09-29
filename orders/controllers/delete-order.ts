@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { isValidObjectId } from 'mongoose'
 import prisma from '../prismaClient'
+import { Prisma } from '@prisma/client'
 
 const deleteOrder = async (req: Request, res: Response) => {
   try {
@@ -15,6 +16,8 @@ const deleteOrder = async (req: Request, res: Response) => {
 
     return res.status(204).json({})
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025')
+      return res.status(404).json({ status: 'Failure', message: 'Order was not found' })
     console.error(error)
     return res.status(500).json({ status: 'Failure', message: 'Internal server error' })
   }

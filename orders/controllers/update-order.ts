@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import prisma from '../prismaClient'
-import { OrderStatus } from '@prisma/client'
+import { OrderStatus, Prisma } from '@prisma/client'
 
 const updateOrder = async (req: Request, res: Response) => {
   try {
@@ -62,6 +62,8 @@ const updateOrder = async (req: Request, res: Response) => {
       .status(400)
       .json({ status: 'Failure', message: 'Something went wrong or invalid fields' })
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025')
+      return res.status(404).json({ status: 'Failure', message: 'Order was not found' })
     console.error(error)
     return res.status(500).json({ status: 'Failure', message: 'Internal server error' })
   }
