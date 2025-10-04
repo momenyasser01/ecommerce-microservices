@@ -32,11 +32,9 @@ app.post('/send-email', async (req: Request, res: Response) => {
       }
     }
 
-    const from = process.env.SEND_EMAIL_FROM! || 'no-reply@onresend.com'
+    const from = process.env.SEND_EMAIL_FROM! || 'no-reply@momenyasser.com'
 
-    if (!from) {
-      return res.status(500).json({ status: 'Failure', message: 'Sender not configured' })
-    }
+    if (!from) return res.status(500).json({ status: 'Failure', message: 'Sender not configured' })
 
     const result = await sendEmail({ from, to, subject, html, text })
 
