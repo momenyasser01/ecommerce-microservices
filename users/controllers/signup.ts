@@ -51,9 +51,17 @@ const signup = async (req: Request, res: Response) => {
       sameSite: 'lax',
     })
 
-    return res
-      .status(201)
-      .json({ status: 'Success', message: 'User has been created successfully' })
+    return res.status(201).json({
+      status: 'Success',
+      message: 'User has been created successfully',
+      user: {
+        id: createdUser.id,
+        firstName: createdUser.firstName,
+        lastName: createdUser.lastName,
+        email: createdUser.email,
+        role: createdUser.role,
+      },
+    })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ status: 'Failure', message: 'Internal server error' })

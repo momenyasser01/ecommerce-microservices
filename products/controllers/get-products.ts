@@ -59,7 +59,7 @@ const getProducts = async (req: Request, res: Response) => {
         where,
         skip,
         take,
-        orderBy: { createdAt: 'desc' }, // optional, for consistent ordering
+        orderBy: { createdAt: 'desc' }, 
       }),
       prisma.products.count({ where }),
     ])
