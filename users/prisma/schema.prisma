@@ -14,7 +14,7 @@ model users {
   firstName                String
   lastName                 String
   passwordChangedAt        DateTime?
-  passwordResetToken       String?      @unique
+  passwordResetToken       String?      
   passwordResetExpires     DateTime?
   role                     Role         @default(USER)
   phoneNumber              String?

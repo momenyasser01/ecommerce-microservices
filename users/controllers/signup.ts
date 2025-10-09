@@ -33,7 +33,15 @@ const signup = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 12)
 
     const createdUser = await prisma.users.create({
-      data: { firstName, lastName, email, phoneNumber, password: hashedPassword },
+      data: {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password: hashedPassword,
+        passwordResetToken: null,
+        passwordResetExpires: null,
+      },
     })
 
     const secret = process.env.JWT_SECRET as string

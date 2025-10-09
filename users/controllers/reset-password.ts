@@ -25,7 +25,7 @@ const resetPassword = async (req: Request, res: Response) => {
 
     const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
 
-    const user = await prisma.users.findUnique({
+    const user = await prisma.users.findFirst({
       where: {
         passwordResetToken: hashedToken,
         passwordResetExpires: { gt: new Date() },
@@ -37,6 +37,15 @@ const resetPassword = async (req: Request, res: Response) => {
         status: 'failure',
         error: 'Token is invalid or has expired',
       })
+
+    if (await bcrypt.compare(password, user.password))
+      return res
+        .status(400)
+        .json({
+          status: 'Failure',
+          error:
+            "Password must be at least 8 characters long, has one special character, and has alphanumeric characters or error occurred can't change password",
+        })
 
     await prisma.users.update({
       where: {
