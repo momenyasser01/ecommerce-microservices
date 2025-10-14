@@ -19,11 +19,11 @@ const Product = ({
   /*category,*/ image,
 }: ProductProps) => {
   return (
-    <div className="flex flex-col justify-between p-5 rounded-2xl border-[1px] shadow-sm gap-4 w-52 h-auto bg-white">
+    <div className="flex flex-col justify-between p-5 rounded-2xl border-[1px] shadow-sm gap-4 w-[100%] h-auto bg-white">
       <div className="relative flex w-full min-h-42 max-h-42 overflow-hidden">
         <Image src={image} alt={name} fill={true} className="object-contain" />
       </div>
-      <p className="font-semibold text-lg h-18">{name}</p>
+      <p className="font-semibold text-lg h-16 line-clamp-2">{name}</p>
       <div className="flex flex-row justify-between items-center">
         <p className="text-gray-500 text-sm">{`${weight}${
           measurement === 'ML' ? 'ml' : measurement === 'G' ? 'g' : 'pcs'

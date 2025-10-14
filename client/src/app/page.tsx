@@ -9,7 +9,10 @@ export default function Home() {
       <div className="w-full fixed top-0 left-0 z-10">
         <Navbar />
       </div>
-      <div className='pt-28'>
+      <div className='w-full flex flex-row justify-between items-center'>
+        
+      </div>
+      <div className='w-full flex justify-center items-center pt-28'>
         <Products />
       </div>
     </div>
