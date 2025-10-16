@@ -54,7 +54,7 @@ const Product = ({
           >
             <MinusIcon className="size-6 text-[#12BC07]" />
           </button>
-          <p className="">{quantity}</p>
+          <p className="font-semibold text-lg">{quantity}</p>
 
           <button
             onClick={handleAddToCart}
