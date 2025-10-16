@@ -48,12 +48,18 @@ const Product = ({
         </Button>
       ) : (
         <div className="flex flex-row justify-between items-center w-full h-9 rounded">
-          <button onClick={handleDecreaseCount}>
+          <button
+            onClick={handleDecreaseCount}
+            className="w-8 h-8 flex justify-center items-center rounded-full hover:bg-gray-100"
+          >
             <MinusIcon className="size-6 text-[#12BC07]" />
           </button>
           <p className="">{quantity}</p>
 
-          <button onClick={handleAddToCart}>
+          <button
+            onClick={handleAddToCart}
+            className="w-8 h-8 flex justify-center items-center rounded-full hover:bg-gray-100"
+          >
             <PlusIcon className="size-6 text-[#12BC07]" />
           </button>
         </div>
