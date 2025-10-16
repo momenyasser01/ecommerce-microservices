@@ -3,7 +3,7 @@ import { SearchIcon, ShoppingCartIcon, UserRound } from 'lucide-react'
 const Navbar = () => {
   return (
     <div className="flex flex-col w-full">
-      <div className="flex flex-row h-16 justify-stretch items-center text-white bg-white">
+      <div className="flex flex-row h-16 justify-between md:justify-stretch items-center text-white bg-white">
         <p className="md:flex hidden text-2xl font-bold text-black ml-30">
           Fresh<span className="text-[#12BC07]">Mart</span>
         </p>
