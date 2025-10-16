@@ -18,7 +18,7 @@ const Products = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:5000/products')
+        const res = await fetch('http://localhost:5000/products?page=1&limit=20')
         if (!res.ok) throw new Error('Failed to fetch products')
 
         const { data } = await res.json()
