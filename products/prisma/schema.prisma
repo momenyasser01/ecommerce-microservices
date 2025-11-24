@@ -12,7 +12,7 @@ model products {
   name          String
   description   String?
   price         Float
-  quantity      Int
+  stock      Int
   weight        Int
   measurement   Measurement
   category      Category
@@ -23,10 +23,14 @@ model products {
 
 enum Category {
   BREAKFAST
+  BAKERY
   BEVERAGES
   DAIRY_AND_EGGS
-  MEAT_POULTRY_AND_SEAFOOD
   FRUITS_AND_VEGETABLES
+  ICE_CREAM
+  POULTRY_AND_MEAT
+  SEAFOOD
+  SNACKS_AND_CHOCOLATE
 }
 
 enum Measurement {

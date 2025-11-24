@@ -4,7 +4,7 @@ import { Category } from '@prisma/client'
 
 const getProducts = async (req: Request, res: Response) => {
   try {
-    const { search, category, minPrice, maxPrice, page = 1, limit = 10 } = req.query
+    const { search, category, minPrice, maxPrice, page = 1, limit = 20 } = req.query
 
     if (!page || !limit)
       return res.status(400).json({ status: 'Failure', message: 'Missing required fields' })

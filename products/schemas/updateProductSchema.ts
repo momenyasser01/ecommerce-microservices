@@ -9,7 +9,7 @@ export const updateProductSchema = z.object({
     .nullable()
     .optional(),
   price: z.number().positive('Price must be greater than 0').optional(),
-  quantity: z.number().int().positive('Quantity must be a positive integer').optional(),
+  stock: z.number().int().positive('Quantity must be a positive integer').optional(),
   weight: z.number().int().positive('Weight must be greater than 0').optional(),
   measurement: z.enum(Measurement).optional(),
   category: z.enum(Category).optional(),

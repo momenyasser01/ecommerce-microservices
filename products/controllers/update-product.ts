@@ -59,10 +59,10 @@ const updateProduct = async (req: Request, res: Response) => {
 
     // if (image && image.length != 0) data.image = image
 
-    if (parsed.data.quantity) {
+    if (parsed.data.stock) {
       let updatedProduct = await prisma.products.update({
         where: { id },
-        data: { ...parsed.data, quantity: product.quantity + parsed.data.quantity },
+        data: { ...parsed.data, stock: product.stock + parsed.data.stock },
       })
 
       return res.status(200).json({

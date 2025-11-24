@@ -10,6 +10,11 @@ const validateCart = async (req: Request, res: Response) => {
     if (!cart) return res.status(400).json({ status: 'Failure', message: 'Missing required field' })
 
     for (const cartProduct of cart) {
+      if (!cartProduct.quantity)
+        return res
+          .status(400)
+          .json({ status: 'Failure', message: 'Missing required field quantity' })
+
       if (!Number.isInteger(cartProduct.quantity) || cartProduct.quantity <= 0) {
         return res.status(400).json({
           status: 'failure',
@@ -31,12 +36,12 @@ const validateCart = async (req: Request, res: Response) => {
           .status(404)
           .json({ status: 'Failure', message: 'Product was not found in the database' })
 
-      if (product.quantity === 0)
+      if (product.stock === 0)
         return res
           .status(400)
           .json({ status: 'Failure', message: 'Product is out of stock', product })
 
-      if (product.quantity < cartProduct.quantity)
+      if (product.stock < cartProduct.quantity)
         return res.status(400).json({
           status: 'Failure',
           message: 'Not enough stock of the product to complete the purchase',

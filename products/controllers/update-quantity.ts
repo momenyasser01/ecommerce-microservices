@@ -9,6 +9,11 @@ const updateQuantity = async (req: Request, res: Response) => {
       return res.status(400).json({ status: 'failure', message: 'Missing required field' })
 
     for (const product of products) {
+      if (!product.quantity)
+        return res
+          .status(400)
+          .json({ status: 'Failure', message: 'Missing required field quantity' })
+
       if (!Number.isInteger(product.quantity) || product.quantity <= 0) {
         return res.status(400).json({
           status: 'failure',
@@ -23,17 +28,17 @@ const updateQuantity = async (req: Request, res: Response) => {
           .status(404)
           .json({ status: 'Failure', message: `Product was not found in the database` })
 
-      if (searchedProduct?.quantity - product.quantity <= 0)
-        await prisma.products.update({ where: { id: product.id }, data: { quantity: 0 } })
+      if (searchedProduct?.stock - product.quantity <= 0)
+        await prisma.products.update({ where: { id: product.id }, data: { stock: 0 } })
       else {
         await prisma.products.update({
           where: { id: product.id },
-          data: { quantity: searchedProduct.quantity - product.quantity },
+          data: { stock: searchedProduct.stock - product.quantity },
         })
       }
     }
 
-    return res.status(200).json({ status: 'Success', message: 'Quantities were updated successfully' })
+    return res.status(200).json({ status: 'Success', message: 'Stock were updated successfully' })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ status: 'Failure', message: 'Internal server error' })
