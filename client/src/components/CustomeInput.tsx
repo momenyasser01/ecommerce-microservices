@@ -1,15 +1,13 @@
 interface CustomInputProps {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
+  error?: string
+  children: React.ReactNode
 }
 
-export function CustomInput({ label, error, children }: CustomInputProps) {
+export function CustomInput({ error, children }: CustomInputProps) {
   return (
-    <div className="space-y-1">
-      <label>{label}</label>
+    <div className="relative w-full space-y-0.5">
       {children}
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
-  );
+  )
 }
