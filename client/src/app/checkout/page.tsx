@@ -30,19 +30,17 @@ const Checkout = () => {
         <h1 className="text-2xl font-bold border-b-4 border-[#00B106]">Checkout</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
           <CustomInput error={errors.fullName?.message}>
-            <div className="relative w-full">
-              <input
-                {...register('fullName')}
-                placeholder=" "
-                className="peer w-full h-10 border-2 border-gray-300 outline-[#00B106] rounded-sm px-4 bg-transparent"
-              />
-              <p
-                className="absolute left-3 top-2 text-gray-500 bg-white px-1 transition-all duration-300 ease-in-out pointer-events-none
+            <input
+              {...register('fullName')}
+              placeholder=" "
+              className="peer w-full h-10 border-2 border-gray-300 outline-[#00B106] rounded-sm px-4 bg-transparent"
+            />
+            <p
+              className="absolute left-3 top-2 text-gray-500 bg-white px-1 transition-all duration-300 ease-in-out pointer-events-none
               peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#00B106] peer-focus:z-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-placeholder-shown:left-3"
-              >
-                Full Name
-              </p>
-            </div>
+            >
+              Full Name
+            </p>
           </CustomInput>
 
           <CustomInput error={errors.phoneNumber?.message}>
