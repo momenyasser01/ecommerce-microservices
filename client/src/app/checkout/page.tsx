@@ -73,31 +73,17 @@ const Checkout = () => {
             </p>
           </CustomInput>
 
-          <CustomInput error={errors.address1?.message}>
+          <CustomInput error={errors.address?.message}>
             <input
               placeholder=" "
-              {...register('address1')}
+              {...register('address')}
               className="peer w-full h-10 border-2 border-gray-300 outline-[#00B106] rounded-sm px-4"
             />
             <p
               className="absolute left-3 top-2 text-gray-500 bg-white px-1 transition-all duration-300 ease-in-out pointer-events-none
               peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#00B106] peer-focus:z-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-placeholder-shown:left-3"
             >
-              Address 1
-            </p>
-          </CustomInput>
-
-          <CustomInput error={errors.address2?.message}>
-            <input
-              placeholder=" "
-              {...register('address2')}
-              className="peer w-full h-10 border-2 border-gray-300 outline-[#00B106] rounded-sm px-4"
-            />
-            <p
-              className="absolute left-3 top-2 text-gray-500 bg-white px-1 transition-all duration-300 ease-in-out pointer-events-none
-              peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#00B106] peer-focus:z-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-placeholder-shown:left-3"
-            >
-              Address 2 (optional)
+              Address
             </p>
           </CustomInput>
 
@@ -192,6 +178,13 @@ const Checkout = () => {
             placeholder="Share your notes... (optional)"
             className="w-full min-h-30 border-2 border-gray-300 placeholder:text-gray-500 outline-[#00B106] rounded-sm px-4 py-2"
           ></textarea>
+
+          <div className="w-full flex flex-row justify-between items-center">
+            <p className="text-lg font-semibold text-[#00B106]">
+              Total ({itemsCount > 1 ? `${itemsCount} items` : `${itemsCount} item`})
+            </p>
+            <p className="text-lg font-semibold text-[#00B106]">{`${total.toFixed(2)} EGP`}</p>
+          </div>
 
           <button
             disabled={isSubmitting}
