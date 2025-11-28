@@ -15,13 +15,13 @@ const Categories = () => {
       opts={{
         align: 'start',
       }}
-      className="w-[66%] md:w-[50%] lg:w-[80%]"
+      className="w-[62%] sm:w-[66.5%] md:w-[71%] lg:w-[73%] 2xl:w-[60%]"
     >
       <CarouselContent>
         {categories.map((category) => (
           <CarouselItem
             key={category.category}
-            className="flex justify-center items-center basis-1/3 md:basis-1/4 lg:basis-1/7"
+            className="flex justify-center items-center basis-1/3 sm:basis-1/4 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 2xl:basis-1/7"
           >
             <Category category={category.category} image={category.image} />
           </CarouselItem>

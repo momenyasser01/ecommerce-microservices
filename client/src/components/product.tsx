@@ -53,7 +53,7 @@ const Product = ({
   }
 
   return (
-    <div className="flex flex-col justify-between p-5 rounded-2xl border-[1px] shadow-sm gap-4 w-[100%] h-auto bg-white">
+    <div className=" w-[100%] h-auto flex flex-col justify-between p-5 rounded-2xl border-[1px] shadow-sm gap-4 bg-white">
       <div className="relative flex w-full min-h-42 max-h-42 overflow-hidden">
         <Image
           src={image}
@@ -76,11 +76,11 @@ const Product = ({
         <p className="font-semibold text-lg">{`${price} EGP`}</p>
       </div>
       {stock === 0 ? (
-        <Button disabled className="bg-gray-300 text-gray-600 cursor-not-allowed">
+        <Button disabled className="bg-gray-300 text-gray-600 cursor-not-allowed text-[17px] h-10">
           Out of Stock
         </Button>
       ) : cartQuantity === 0 ? (
-        <Button onClick={handleAddToCart} className="bg-[#00B106] hover:bg-[#00990A]">
+        <Button onClick={handleAddToCart} className="bg-[#00B106] hover:bg-[#00990A] text-[17px] h-10">
           Add to cart
         </Button>
       ) : (

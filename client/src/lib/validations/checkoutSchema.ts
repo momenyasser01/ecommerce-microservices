@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const egyptPhoneRegex = /^(?:\+?20)?1[0-2,5][0-9]{8}$/
+const egyptPhoneRegex = /^01[0-2,5][0-9]{8}$/
 
 export const checkoutSchema = z.object({
   fullName: z.string().min(3, 'Name must be at least 3 characters long'),

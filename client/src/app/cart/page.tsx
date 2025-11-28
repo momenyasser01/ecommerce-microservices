@@ -2,9 +2,11 @@
 
 import CartItem from '@/components/cart-item'
 import { useCart } from '@/context/cart-context'
+import { useRouter } from 'next/navigation'
 
 const Cart = () => {
   const { cart, addItem, decreaseQuantity, removeItem, total } = useCart()
+  const router = useRouter()
 
   const itemsCount = cart.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -27,7 +29,10 @@ const Cart = () => {
           <p>{`Total (${itemsCount} items):`}</p>
           <p className="text-xl text-[#00B106] font-semibold">{`${total.toFixed(2)} EGP`}</p>
         </div>
-        <button className="w-full h-10 flex justify-center items-center rounded-sm text-white font-semibold bg-[#00B106] hover:bg-[#00990A] transition-all ease-in-out duration-200">
+        <button
+          onClick={() => router.push('/checkout')}
+          className="w-full h-10 flex justify-center items-center rounded-sm text-white font-semibold bg-[#00B106] hover:bg-[#00990A] transition-all ease-in-out duration-200"
+        >
           Checkout
         </button>
       </div>
