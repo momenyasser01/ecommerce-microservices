@@ -20,7 +20,7 @@ const Category = ({ category, image }: CategoryProps) => {
         </div>
       </div>
 
-      <p className="font-semibold text-xs md:text-base lg:text-lg text-center h-9">{category}</p>
+      <p className="font-medium text-xs md:text-base lg:text-lg text-center h-9">{category}</p>
     </div>
   )
 }

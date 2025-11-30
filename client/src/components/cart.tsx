@@ -10,13 +10,15 @@ const Cart = () => {
   const itemsCount = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   return (
-    <Link href={'/cart'} className="relative text-black">
-      {itemsCount > 0 && (
-        <div className="absolute left-4 bottom-3 flex justify-center items-center size-5 rounded-full text-[12.5px] font-semibold text-white bg-[#00B106]">
-          {itemsCount}
-        </div>
-      )}
-      <ShoppingCartIcon />
+    <Link href={'/cart'} className="flex justify-center items-center text-black">
+      <div className="relative">
+        <ShoppingCartIcon className='size-7'/>
+        {itemsCount > 0 && (
+          <div className="absolute left-4 bottom-3 flex justify-center items-center size-5.5 rounded-full text-xs font-semibold text-white bg-green-600/95">
+            {itemsCount}
+          </div>
+        )}
+      </div>
     </Link>
   )
 }
