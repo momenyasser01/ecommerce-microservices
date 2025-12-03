@@ -9,27 +9,26 @@ datasource db {
 
 model orders {
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
-  firstName         String
-  lastName          String
-  email             String
-  phone             String?
-  products          OrderProduct[]
-  country           String
+  fullName          String
+  phoneNumber       String
+  email             String?
+  address           String
+  apartment         String?
   city              String
   area              String
-  street            String
-  building          String
-  floor             String
-  apartmentNumber   String?
-  status            OrderStatus @default(CREATED)
+  postalCode        String
+  paymentMethod     String
+  products          OrderProduct[]
   total             Float
+  status            OrderStatus @default(PENDING)
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 }
 
 type OrderProduct {
+  id            String
   name          String
-  description   String?
+  // description   String?
   price         Float
   quantity      Int
   weight        Int
@@ -38,6 +37,7 @@ type OrderProduct {
 }
 
 enum OrderStatus {
+  PENDING
   CREATED
   DELIVERED
   CANCELLED

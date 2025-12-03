@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { sendEmail } from './utils/emailClient'
 import isValidEmail from './utils/isValidEmail'
+import { makeKafka, getProducer } from './kafka/kafkaClient'
+import { runNotificationConsumer } from './kafka/consumers/notificationConsumer'
 
 dotenv.config()
 
@@ -12,7 +14,7 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-app.post('/send-email', async (req: Request, res: Response) => {
+export const sendOrderEmail = async (req: Request, res: Response) => {
   try {
     const { to, subject, html, text } = req.body
 
@@ -38,6 +40,8 @@ app.post('/send-email', async (req: Request, res: Response) => {
 
     const result = await sendEmail({ from, to, subject, html, text })
 
+    console.log(result)
+
     return res.status(200).json({ status: 'Success', data: result })
   } catch (err: any) {
     console.error('Failed to send via Resend:', err)
@@ -45,10 +49,20 @@ app.post('/send-email', async (req: Request, res: Response) => {
       .status(500)
       .json({ status: 'Failure', message: err.message || 'Internal server error' })
   }
-})
+}
+
+app.post('/send-email', sendOrderEmail)
 
 const port = process.env.PORT || 5003
 
-app.listen(port, () => {
-  console.log(`Orders service running on port ${port}`)
-})
+async function start() {
+  const kafka = makeKafka('notifications-service')
+  await getProducer(kafka) // warm producer though not needed
+  runNotificationConsumer().catch(console.error)
+  console.log('Notifications service started')
+  app.listen(port, () => {
+    console.log(`Orders service running on port ${port}`)
+  })
+}
+
+start().catch(console.error)

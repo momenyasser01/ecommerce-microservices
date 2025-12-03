@@ -1,8 +1,9 @@
 import { z } from 'zod'
 
 export const orderProductSchema = z.object({
+  id: z.string(),
   name: z.string().min(1, 'Product name is required'),
-  description: z.string().optional().nullable(),
+  // description: z.string().optional(),
   price: z.number().positive('Price must be > 0'),
   quantity: z.number().int().positive('Quantity must be > 0'),
   weight: z.number().int().positive('Weight must be > 0'),
@@ -11,19 +12,17 @@ export const orderProductSchema = z.object({
 })
 
 export const orderSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.email('Invalid email address'),
-  phone: z.string().optional().nullable(),
+  fullName: z.string().min(2, 'Full name is required'),
+  phoneNumber: z.string(),
+  email: z.email('Invalid email address').optional(),
   products: z.array(orderProductSchema).min(1, 'At least one product is required'),
-  country: z.string().min(1, 'Country is required'),
+  address: z.string().min(16, 'Address needs to be at least 16 characters long'),
+  apartment: z.string().optional().nullable(),
   city: z.string().min(1, 'City is required'),
   area: z.string().min(1, 'Area is required'),
-  street: z.string().min(1, 'Street is required'),
-  building: z.string().min(1, 'Building is required'),
-  floor: z.string().min(1, 'Floor is required'),
-  apartmentNumber: z.string().optional().nullable(),
-  status: z.enum(['CREATED', 'DELIVERED', 'CANCELLED']).default('CREATED'),
+  postalCode: z.string(),
+  paymentMethod: z.enum(['COD', 'ONLINE']).default('COD'),
+  status: z.enum(['PENDING', 'CREATED', 'DELIVERED', 'CANCELLED']).default('PENDING'),
   total: z.number().positive('Total must be > 0'),
 })
 

@@ -20,8 +20,11 @@ export async function sendEmail(opts: {
   } as CreateEmailOptions)
 
   if (error) {
+    console.error(error)
     throw new Error(JSON.stringify(error))
   }
+  
+  console.log(data)
   return data
 }
 

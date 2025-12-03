@@ -4,11 +4,13 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { checkoutSchema, CheckoutSchema } from '../../lib/validations/checkoutSchema'
-import { CustomInput } from '@/components/CustomeInput'
+import { CustomInput } from '@/components/CustomInput'
 import { useCart } from '@/context/cart-context'
-import SummaryCartItem from '@/components/summary-cart-item'
+import { useState } from 'react'
 
 const Checkout = () => {
+  const [paymentMethod, setPaymentMethod] = useState('COD')
+
   const {
     register,
     handleSubmit,
@@ -19,14 +21,42 @@ const Checkout = () => {
 
   const { cart, total } = useCart()
 
-  const taxes = Number(total) * (12.5 / 100)
-  const absoluteTotal = Number(total) + 50 + taxes
-
   const itemsCount = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   const onSubmit = async (data: CheckoutSchema) => {
     console.log(data)
-    // send to API route or server action
+
+    try {
+      const response = await fetch('http://localhost:5002/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          paymentMethod,
+          products: cart,
+          total,
+        }),
+      })
+
+      if (!response.ok) {
+        console.error('Order failed')
+        console.log(response)
+        return
+      }
+
+      if (response.ok) {
+        alert('Order created successfully')
+        console.log(response)
+      }
+
+      const result = await response.json()
+
+      console.log('ORDER CREATED:', result)
+    } catch (error) {
+      console.error('Network or server error:', error)
+    }
   }
 
   return (
@@ -91,24 +121,10 @@ const Checkout = () => {
           </p>
         </CustomInput>
 
-        {/* <CustomInput error={errors.city?.message}>
-            <input
-              placeholder=" "
-              {...register('city')}
-              className="peer w-full h-12.5 border-1 border-gray-300 focus:outline-[#00B106] rounded-sm px-[11px] transition-all ease-in-out duration-300"
-            />
-            <p
-              className="absolute left-2 top-2 text-gray-500 bg-white px-1 transition-all duration-300 ease-in-out pointer-events-none
-              peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#00B106] peer-focus:z-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-placeholder-shown:left-2"
-            >
-              City
-            </p>
-          </CustomInput> */}
-
-        <CustomInput error={errors.area?.message}>
+        <CustomInput error={errors.apartment?.message}>
           <input
             placeholder=" "
-            {...register('area')}
+            {...register('apartment')}
             className="peer w-full h-12.5 border-1 border-gray-300 focus:outline-[#00B106] rounded-sm px-[11px] transition-all ease-in-out duration-300"
           />
           <p
@@ -120,10 +136,10 @@ const Checkout = () => {
         </CustomInput>
 
         <div className="w-full flex xl:flex-row flex-col lg:gap-3 gap-4">
-          <CustomInput className="col-span-1" error={errors.buildingNumber?.message}>
+          <CustomInput className="col-span-1" error={errors.city?.message}>
             <input
               placeholder=" "
-              {...register('buildingNumber')}
+              {...register('city')}
               className="peer w-full h-12.5 border-1 border-gray-300 focus:outline-[#00B106] rounded-sm px-[11px] transition-all ease-in-out duration-300"
             />
             <p
@@ -134,10 +150,10 @@ const Checkout = () => {
             </p>
           </CustomInput>
 
-          <CustomInput className="col-span-1" error={errors.floor?.message}>
+          <CustomInput className="col-span-1" error={errors.area?.message}>
             <input
               placeholder=" "
-              {...register('floor')}
+              {...register('area')}
               className="peer w-full h-12.5 border-1 border-gray-300 focus:outline-[#00B106] rounded-sm px-[11px] transition-all ease-in-out duration-300"
             />
             <p
@@ -148,10 +164,10 @@ const Checkout = () => {
             </p>
           </CustomInput>
 
-          <CustomInput className="col-span-2 lg:col-span-1" error={errors.apartmentNumber?.message}>
+          <CustomInput className="col-span-2 lg:col-span-1" error={errors.postalCode?.message}>
             <input
               placeholder=" "
-              {...register('apartmentNumber')}
+              {...register('postalCode')}
               className="peer w-full h-12.5 border-1 border-gray-300 focus:outline-[#00B106] rounded-sm px-[11px] transition-all ease-in-out duration-300"
             />
             <p
@@ -168,8 +184,35 @@ const Checkout = () => {
           placeholder="Share your notes... (optional)"
           className="w-full min-h-30 border-1 border-gray-300 placeholder:text-gray-500 lg:placeholder:text-base placeholder:text-sm focus:outline-[#00B106] rounded-sm px-[11px] py-2 transition-all ease-in-out duration-300"
         ></textarea>
-        <button className="w-full h-12.5 rounded-sm text-white font-medium bg-green-600/95">
-          Pay now
+
+        <div className="w-full flex flex-row justify-between items-start gap-3">
+          <div
+            onClick={() => setPaymentMethod('COD')}
+            className={`w-full h-12.5 flex justify-center items-center border-2  rounded-sm font-medium cursor-pointer transition-all ease-in-out duration-200 ${
+              paymentMethod === 'COD' ? 'text-black' : 'text-gray-500'
+            } ${paymentMethod === 'COD' ? 'border-green-600/95' : 'border-gray-300'}`}
+          >
+            <p>Cash on delivery</p>
+          </div>
+
+          <div
+            onClick={() => setPaymentMethod('ONLINE')}
+            className={`w-full h-12.5 flex justify-center items-center border-2 rounded-sm font-medium cursor-pointer transition-all ease-in-out duration-200 ${
+              paymentMethod === 'ONLINE' ? 'text-black' : 'text-gray-500'
+            } ${paymentMethod === 'ONLINE' ? 'border-green-600/95' : 'border-gray-300'}`}
+          >
+            <p>Online payment</p>
+          </div>
+        </div>
+
+        <button className="w-full h-12.5 rounded-sm text-white font-medium bg-green-600/95 hover:bg-[#00990A] transition-all ease-in-out duration-200">
+          {`${
+            isSubmitting
+              ? 'Loading...'
+              : paymentMethod === 'cashOnDelivery'
+              ? 'Place order'
+              : 'Pay now'
+          }`}
         </button>
       </form>
 
@@ -196,7 +239,7 @@ const Checkout = () => {
         </div>
 
         <div className="w-full flex justify-between items-center gap-3">
-          <CustomInput error={errors.fullName?.message}>
+          <CustomInput>
             <input
               title="Discount Code"
               value={''}
@@ -215,7 +258,7 @@ const Checkout = () => {
           </button>
         </div>
 
-        <div className="w-full flex flex-col justify-start items-start gap-2.5">
+        <div className="w-full flex flex-col justify-start items-start gap-2">
           <div className="w-full flex justify-between items-start">
             <div className="flex flex-row justify-center items-center text-sm font-medium gap-1">
               Subtotal <div className="size-[2px] rounded-full bg-black"></div> {itemsCount} items

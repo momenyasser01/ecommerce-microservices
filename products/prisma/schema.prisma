@@ -12,7 +12,7 @@ model products {
   name          String
   description   String?
   price         Float
-  stock      Int
+  stock         Int
   weight        Int
   measurement   Measurement
   category      Category
