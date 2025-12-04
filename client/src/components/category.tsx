@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface CategoryProps {
   category: string
@@ -6,8 +9,17 @@ interface CategoryProps {
 }
 
 const Category = ({ category, image }: CategoryProps) => {
+  const router = useRouter()
+
+  function handleOnClick() {
+    router.push(`?category=${category}`)
+  }
+
   return (
-    <div className="w-16 h-38 md:w-20 md:h-42 lg:w-26 lg:h-48 flex flex-col justify-center items-center gap-4">
+    <div
+      onClick={handleOnClick}
+      className="w-16 h-38 md:w-20 md:h-42 lg:w-26 lg:h-48 flex flex-col justify-center items-center gap-4"
+    >
       <div className="flex justify-center items-center w-16 h-16 md:w-20 md:h-20 lg:w-26 lg:h-26 rounded-full border-[1px] shadow-sm">
         <div className="relative w-16 h-16 md:w-20 md:h-20 lg:w-26 lg:h-26 aspect-square overflow-hidden">
           <Image
@@ -15,7 +27,7 @@ const Category = ({ category, image }: CategoryProps) => {
             alt="Meat"
             fill={true}
             className="rounded-full object-cover opacity-70 hover:opacity-100 transition-opacity duration-300"
-            quality={70}
+            quality={60}
           />
         </div>
       </div>

@@ -59,7 +59,7 @@ const getProducts = async (req: Request, res: Response) => {
         where,
         skip,
         take,
-        orderBy: { createdAt: 'desc' }, 
+        orderBy: { createdAt: 'desc' },
       }),
       prisma.products.count({ where }),
     ])
@@ -79,7 +79,7 @@ const getProducts = async (req: Request, res: Response) => {
     })
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ status: 'failure', message: 'Internal server error' })
+    return res.status(500).json({ status: 'failure', message: 'Internal server error', data: [] })
   }
 }
 

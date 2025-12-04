@@ -17,18 +17,21 @@ export interface OrderPublishedEvent {
   orderId: UUID
   email?: string
   items: OrderItem[]
+  reservationIDs: string[]
   paymentMethod: PaymentMethod
   createdAt: string
 }
 
-export interface OrderStockConfirmedEvent {
+export interface OrderStockDeductedEvent {
   orderId: UUID
+  email?: string
   valid: true
   checkedAt: string
 }
 
 export interface OrderStockRejectedEvent {
   orderId: UUID
+  email?: string
   valid: false
   missing: { productId: string; available: number; requested: number }[]
   checkedAt: string

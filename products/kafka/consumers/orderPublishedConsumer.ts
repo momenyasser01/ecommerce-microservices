@@ -1,6 +1,6 @@
 import { makeKafka, createConsumer, getProducer } from '../kafkaClient'
 import axios from 'axios'
-import { OrderPublishedEvent, OrderStockConfirmedEvent, OrderStockRejectedEvent } from '../events'
+import { OrderPublishedEvent, OrderStockDeductedEvent, OrderStockRejectedEvent } from '../events'
 import { CompressionTypes } from 'kafkajs'
 
 const kafka = makeKafka('products-service')
@@ -17,7 +17,7 @@ export async function runOrderPublishedConsumer() {
 
       console.log('[Products] Received event: ', payload)
 
-      const { orderId, items } = payload
+      const { orderId, items, email, reservationIDs } = payload
 
       const producer = await getProducer(kafka)
 
@@ -25,17 +25,19 @@ export async function runOrderPublishedConsumer() {
         // Call the new merged API endpoint
         const response = await axios.patch('http://localhost:5000/products/validate-and-update', {
           cart: items.map((item) => ({ id: item.id, quantity: item.quantity, price: item.price })),
+          reservationIDs,
         })
 
         if (response.data.status === 'Success') {
           // Stock valid → publish confirmed event
-          const okEvent: OrderStockConfirmedEvent = {
+          const okEvent: OrderStockDeductedEvent = {
             orderId,
+            email,
             valid: true,
             checkedAt: new Date().toISOString(),
           }
           await producer.send({
-            topic: 'order.stock-confirmed',
+            topic: 'order.stock-deducted',
             messages: [{ key: orderId, value: JSON.stringify(okEvent) }],
             compression: CompressionTypes.GZIP,
           })

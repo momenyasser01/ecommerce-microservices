@@ -19,6 +19,23 @@ model products {
   image         String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt()
+  reservations  productReservations[]
+}
+
+model productReservations {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  productID     String       @db.ObjectId
+  product       products     @relation(fields: [productID], references: [id])
+  quantity      Int
+  expiresAt     DateTime
+  status        Status
+  
+}
+
+enum Status {
+  ACTIVE
+  CANCELLED
+  COMPLETED
 }
 
 enum Category {

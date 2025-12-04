@@ -1,50 +1,52 @@
 // events.ts
-export type UUID = string;
+export type UUID = string
 
 export interface OrderItem {
-  id: string;
-  name: string;
+  id: string
+  name: string
   // description?: string | undefined;
-  price: number;
-  quantity: number;
-  weight: number;
-  measurement: string;
+  price: number
+  quantity: number
+  weight: number
+  measurement: string
 }
 
-export type PaymentMethod = "COD" | "ONLINE";
+export type PaymentMethod = 'COD' | 'ONLINE'
 
 export interface OrderPublishedEvent {
-  orderId: UUID;
-  email?: string;
-  items: OrderItem[];
-  paymentMethod: PaymentMethod;
-  createdAt: string;
+  orderId: UUID
+  email?: string
+  items: OrderItem[]
+  paymentMethod: PaymentMethod
+  reservationIDs: string[]
+  createdAt: string
 }
 
-export interface OrderStockConfirmedEvent {
-  orderId: UUID;
-  valid: true;
-  checkedAt: string;
+export interface OrderStockDeductedEvent {
+  orderId: UUID
+  email?: string
+  valid: true
+  checkedAt: string
 }
 
 export interface OrderStockRejectedEvent {
-  orderId: UUID;
-  valid: false;
-  missing: { productId: string; available: number; requested: number }[];
-  checkedAt: string;
+  orderId: UUID
+  valid: false
+  missing: { productId: string; available: number; requested: number }[]
+  checkedAt: string
 }
 
 export interface OrderCreatedEvent {
-  orderId: UUID;
-  status: "CREATED";
+  orderId: UUID
+  status: 'CREATED'
   email?: string
-  createdAt: string;
+  createdAt: string
 }
 
 export interface OrderCancelledEvent {
-  orderId: UUID;
-  status: "CANCELLED";
+  orderId: UUID
+  status: 'CANCELLED'
   email?: string
-  reason?: string;
-  cancelledAt: string;
+  reason?: string
+  cancelledAt: string
 }

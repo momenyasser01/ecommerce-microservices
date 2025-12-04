@@ -13,7 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 interface Product {
   id: string
@@ -27,14 +27,22 @@ interface Product {
   image: string
 }
 
-async function fetchProducts(page: number) {
+async function fetchProducts(page: number, category: string) {
   try {
-    const res = await fetch(`http://localhost:5000/products?page=${page}&limit=12`, {
-      cache: 'force-cache',
-      next: { revalidate: 120 }
-    })
+    const res = await fetch(
+      `http://localhost:5000/products?category=${category}&page=${page}&limit=16`,
+      {
+        cache: 'force-cache',
+        next: { revalidate: 60 },
+      },
+    )
 
-    if (!res.ok) throw new Error('Failed to fetch products')
+    // if (res.status === 404)
+    //   return (
+    //     <div className="w-full h-full flex flex-grow justify-center items-start text-center">
+    //       <p className="font-semibold">No products were found</p>
+    //     </div>
+    //   )
 
     return res.json()
   } catch (error) {
@@ -61,10 +69,11 @@ const Products = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const page = Number(searchParams.get('page')) || 1
+  const category = searchParams.get('category') || ''
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['products', page],
-    queryFn: () => fetchProducts(page),
+    queryKey: ['products', page, category],
+    queryFn: () => fetchProducts(page, category),
     staleTime: 120 * 1000,
   })
 
@@ -74,7 +83,6 @@ const Products = () => {
 
   const totalPages = data?.totalPages ?? 0
   const products: Product[] = data?.data ?? []
-
 
   const pages = useMemo(() => generatePages(page, totalPages), [page, totalPages])
 

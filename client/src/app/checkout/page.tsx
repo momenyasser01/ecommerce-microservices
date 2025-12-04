@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { checkoutSchema, CheckoutSchema } from '../../lib/validations/checkoutSchema'
-import { CustomInput } from '@/components/CustomInput'
+import { CustomInput } from '@/components/custom-input'
 import { useCart } from '@/context/cart-context'
 import { useState } from 'react'
 

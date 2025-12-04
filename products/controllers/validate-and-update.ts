@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import prisma from '../prismaClient'
 
 const validateAndUpdateStock = async (req: Request, res: Response) => {
-  const { cart } = req.body
+  const { cart, reservationIDs } = req.body
 
   if (!cart) {
     return res.status(400).json({
@@ -17,59 +17,81 @@ const validateAndUpdateStock = async (req: Request, res: Response) => {
   try {
     // Use a transaction
     await prisma.$transaction(async (tx) => {
+      for (const resID of reservationIDs) {
+        const reservation = await tx.productReservations.findUnique({ where: { id: resID } })
+
+        if (!reservation)
+          return res
+            .status(404)
+            .json({ status: 'Failure', message: 'Reservation not found', data: reservation })
+
+        if (reservation.status !== 'ACTIVE' || reservation.expiresAt < new Date(Date.now()))
+          return res.status(400).json({
+            status: 'Failure',
+            message: 'Reservation INACTIVE or expired',
+            data: reservation,
+          })
+      }
+
       // Step 1: Validate all items
       for (const item of cart) {
         const { id, quantity, price } = item
 
         // Quantity validation
         if (!quantity || !Number.isInteger(quantity) || quantity <= 0) {
-          missing.push({
-            productId: id,
-            reason: 'INVALID_QUANTITY',
-            requested: quantity,
+          return res.status(400).json({
+            status: 'Failure',
+            message: 'INVALID_QUANTITY',
+            data: { id, reason: 'INVALID_QUANTITY', quantity },
           })
-          continue
         }
 
         // Price validation
         if (!price || price <= 0) {
-          missing.push({
-            productId: id,
-            reason: 'INVALID_PRICE',
-            price,
+          return res.status(400).json({
+            status: 'Failure',
+            message: 'INVALID_PRICE',
+            data: { id, reason: 'INVALID_PRICE', price },
           })
-          continue
         }
 
         // Fetch product inside the transaction
         const product = await tx.products.findUnique({ where: { id } })
 
         if (!product) {
-          missing.push({
-            productId: id,
-            reason: 'NOT_FOUND',
+          return res.status(404).json({
+            status: 'Failure',
+            message: 'PRODUCT_NOT_FOUND',
+            data: { reason: 'PRODUCT_NOT_FOUND', id },
           })
-          continue
         }
 
         if (product.stock === 0) {
           missing.push({
-            productId: id,
-            reason: 'OUT_OF_STOCK',
+            id,
+            reason: 'PRODUCT_OUT_OF_STOCK',
             available: 0,
             requested: quantity,
           })
-          continue
+          return res.status(409).json({
+            status: 'Failure',
+            message: 'PRODUCT_OUT_OF_STOCK',
+            data: { reason: 'PRODUCT_OUT_OF_STOCK', id },
+          })
         }
 
         if (product.stock < quantity) {
           missing.push({
-            productId: id,
+            id,
             reason: 'INSUFFICIENT_STOCK',
             available: product.stock,
             requested: quantity,
           })
-          continue
+          return res.status(400).json({
+            status: 'Failure',
+            message: 'INSUFFICIENT_STOCK',
+            data: { reason: 'INSUFFICIENT_STOCK', id },
+          })
         }
 
         // Valid → accumulate total price
@@ -102,6 +124,7 @@ const validateAndUpdateStock = async (req: Request, res: Response) => {
   } catch (error: any) {
     // Handle missing items from transaction
     if (error.missing) {
+      console.log(error.missing)
       return res.status(409).json({
         status: 'Failure',
         message: 'Some items are invalid or out of stock',

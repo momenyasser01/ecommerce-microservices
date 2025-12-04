@@ -60,7 +60,7 @@ const Product = ({
           alt={name}
           fill={true}
           className={`object-contain transition ${stock === 0 ? 'grayscale opacity-60' : ''}`}
-          quality={70}
+          quality={10}
         />
         {/* {stock === 0 && (
           <span className="absolute md:top-2 md:left-2 bg-red-500 text-white text-[10px] md:text-xs font-bold px-2 py-1 rounded">
@@ -76,11 +76,17 @@ const Product = ({
         <p className="font-medium md:text-lg text-xs">{`${price} EGP`}</p>
       </div>
       {stock === 0 ? (
-        <Button disabled className="bg-gray-300 text-gray-600 cursor-not-allowed md:text-[17px] text-xs font-medium h-8 md:h-10">
+        <Button
+          disabled
+          className="bg-gray-300 text-gray-600 cursor-not-allowed md:text-[17px] text-xs font-medium h-8 md:h-10"
+        >
           Out of Stock
         </Button>
       ) : cartQuantity === 0 ? (
-        <Button onClick={handleAddToCart} className="bg-green-600/95 hover:bg-[#00990A] rounded-full md:text-[17px] text-xs font-medium h-8 md:h-10">
+        <Button
+          onClick={handleAddToCart}
+          className="bg-green-600/95 hover:bg-[#00990A] rounded-full md:text-[17px] text-xs font-medium h-8 md:h-10"
+        >
           Add to cart
         </Button>
       ) : (
