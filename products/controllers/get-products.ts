@@ -43,6 +43,16 @@ const getProducts = async (req: Request, res: Response) => {
       where.category = normalized as Category
     }
 
+    if (minPrice && maxPrice && Number(maxPrice) >= Number(minPrice))
+    {
+      where.price = {}
+      if (Number(maxPrice) >= 0 && Number(minPrice) >= 0)
+      {
+        where.price.gte = Number(minPrice)
+        where.price.lte = Number(maxPrice)
+      }
+    }
+
     if (minPrice || maxPrice) {
       where.price = {}
       if (minPrice && Number(minPrice) >= 0) where.price.gte = Number(minPrice)

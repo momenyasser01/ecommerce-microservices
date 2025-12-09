@@ -53,23 +53,21 @@ const Product = ({
   }
 
   return (
-    <div className=" w-full h-auto flex flex-col justify-between p-5 rounded-2xl border-[2px] gap-4 bg-white">
-      <div className="relative flex w-full min-h-21 min-w-21 md:min-h-42 md:min-w-42 overflow-hidden">
-        <Image
-          src={image}
-          alt={name}
-          fill={true}
-          className={`object-contain transition ${stock === 0 ? 'grayscale opacity-60' : ''}`}
-          quality={10}
-        />
-        {/* {stock === 0 && (
-          <span className="absolute md:top-2 md:left-2 bg-red-500 text-white text-[10px] md:text-xs font-bold px-2 py-1 rounded">
-            Out of Stock
-          </span>
-        )} */}
-      </div>
-      <p className="font-medium md:text-lg text-sm h-16 md:line-clamp-2 line-clamp-3">{name}</p>
-      <div className="flex flex-row justify-between items-center">
+    <div className="w-full h-auto flex flex-col justify-between items-center p-5 rounded-2xl border-[2px] gap-4 bg-white">
+      <Image
+        src={image}
+        alt={name}
+        width={184}
+        height={184}
+        className={`flex h-32 w-32 sm:h-38 sm:w-38 md:h-46 md:w-46 overflow-hidden object-contain transition ${
+          stock === 0 ? 'grayscale opacity-60' : ''
+        }`}
+        quality={30}
+      />
+      <p className="w-full font-medium md:text-lg text-sm h-16 text-start md:line-clamp-2 line-clamp-3">
+        {name}
+      </p>
+      <div className="w-full flex flex-row justify-between items-center">
         <p className="text-gray-500 md:text-sm text-[11px]">{`${weight}${
           measurement === 'ML' ? 'ml' : measurement === 'G' ? 'g' : 'pcs'
         }`}</p>
@@ -78,14 +76,14 @@ const Product = ({
       {stock === 0 ? (
         <Button
           disabled
-          className="bg-gray-300 text-gray-600 cursor-not-allowed md:text-[17px] text-xs font-medium h-8 md:h-10"
+          className="w-full bg-gray-300 text-gray-600 cursor-not-allowed md:text-[17px] text-xs font-medium rounded-full h-8 md:h-10"
         >
           Out of Stock
         </Button>
       ) : cartQuantity === 0 ? (
         <Button
           onClick={handleAddToCart}
-          className="bg-green-600/95 hover:bg-[#00990A] rounded-full md:text-[17px] text-xs font-medium h-8 md:h-10"
+          className="w-full bg-green-600/95 hover:bg-[#00990A] rounded-full md:text-[17px] text-xs font-medium cursor-pointer h-8 md:h-10"
         >
           Add to cart
         </Button>
@@ -93,7 +91,7 @@ const Product = ({
         <div className="flex flex-row justify-between items-center w-full md:h-10 h-8 rounded">
           <button
             onClick={handleDecreaseCount}
-            className="w-8 h-8 flex justify-center items-center rounded-full hover:bg-gray-100"
+            className="w-8 h-8 flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-100"
           >
             {''}
             <MinusIcon className="md:size-6 size-4.5 text-green-600/95" />
@@ -101,11 +99,14 @@ const Product = ({
           <p className="font-semibold md:text-lg text-sm">{cartQuantity}</p>
 
           <button
+            disabled={cartQuantity === stock}
             onClick={handleAddToCart}
-            className="w-8 h-8 flex justify-center items-center rounded-full hover:bg-gray-100"
+            className={`w-8 h-8 flex justify-center items-center rounded-full cursor-pointer ${
+              cartQuantity === stock ? '' : 'hover:bg-gray-100'
+            }`}
           >
             {''}
-            <PlusIcon className="md:size-6 size-4.5 text-green-600/95" />
+            <PlusIcon className={`md:size-6 size-4.5 ${cartQuantity === stock ? "text-green-700/20" : "text-green-600/95"} `} />
           </button>
         </div>
       )}

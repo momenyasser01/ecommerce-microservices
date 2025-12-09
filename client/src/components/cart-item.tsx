@@ -24,9 +24,8 @@ interface CartItemProps {
 const CartItem = ({ cartItem, addItem, decreaseQuantity, removeItem }: CartItemProps) => {
   return (
     <div className="relative w-full flex flex-row justify-between items-center gap-2 xl:gap-0">
-      <div className="w-24 relative">
-        <Image src={cartItem.image} alt="Product image" width={96} height={96} quality={70} />
-      </div>
+      <Image src={cartItem.image} alt="Product image" className='object-contain size-24' width={96} height={96} quality={70} />
+
       <div className="xl:w-[81.5%] w-full flex flex-row justify-center items-center gap-4">
         <div className="w-full flex flex-col justify-start items-start gap-2">
           <div className="w-full flex justify-between items-start">
@@ -36,7 +35,8 @@ const CartItem = ({ cartItem, addItem, decreaseQuantity, removeItem }: CartItemP
                 onClick={() => removeItem(cartItem.id)}
                 className="size-7 flex justify-center items-center rounded-full text-gray-500 hover:text-black/90 hover:bg-gray-200/50 transition-all ease-in-out duration-150"
               >
-                <XIcon className='size-4' />{""}
+                <XIcon className="size-4" />
+                {''}
               </button>
             )}
           </div>

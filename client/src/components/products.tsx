@@ -13,7 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 interface Product {
   id: string
@@ -32,17 +32,9 @@ async function fetchProducts(page: number, category: string) {
     const res = await fetch(
       `http://localhost:5000/products?category=${category}&page=${page}&limit=16`,
       {
-        cache: 'force-cache',
         next: { revalidate: 60 },
       },
     )
-
-    // if (res.status === 404)
-    //   return (
-    //     <div className="w-full h-full flex flex-grow justify-center items-start text-center">
-    //       <p className="font-semibold">No products were found</p>
-    //     </div>
-    //   )
 
     return res.json()
   } catch (error) {

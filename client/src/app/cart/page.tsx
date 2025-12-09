@@ -2,6 +2,7 @@
 
 import CartItem from '@/components/cart-item'
 import { useCart } from '@/context/cart-context'
+import { ShoppingBasketIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 const Cart = () => {
@@ -9,6 +10,23 @@ const Cart = () => {
   const router = useRouter()
 
   const itemsCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+
+  if (cart.length === 0)
+    return (
+      <div className="w-full h-full flex flex-grow flex-col justify-center items-center gap-6">
+        <ShoppingBasketIcon className="size-20" />
+        <div className="flex flex-col justify-center items-center gap-1">
+          <p className="text-2xl font-semibold">Your cart is empty</p>
+          <p className="text-lg text-gray-600">Ready to order?</p>
+        </div>
+        <button
+          onClick={() => router.replace('/')}
+          className="w-26 h-9 bg-green-600/95 hover:bg-[#00990A] rounded-full text-white font-medium transition-all ease-in-out duration-200"
+        >
+          Shop now
+        </button>
+      </div>
+    )
 
   return (
     <div className="w-full flex xl:flex-row flex-col justify-center xl:items-start items-center py-8 gap-19">
